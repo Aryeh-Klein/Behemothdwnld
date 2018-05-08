@@ -8,6 +8,8 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -43,7 +45,17 @@ public class pesukimpage extends AppCompatActivity {
         //pesukim = (TextView) findViewById(R.id.pesukim);
          pesukim = new TextView(this);
 
-        if(sefer.equals("Shmot") && perek == 32){
+        if(sefer.equals("Shmot") && (perek == 32 || perek ==34)){
+            //THis is the code to eventually add a listen button
+            /*final Button button = (Button) findViewById(R.id.perek_sound);
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Code here executes on main thread after user presses button
+                   playSound();
+
+                }
+            });
+
             /*try{
                 StringBuilder buf = new StringBuilder();
                 InputStream json = getAssets().open("Shmot32.txt");
@@ -69,6 +81,10 @@ public class pesukimpage extends AppCompatActivity {
 
             pesukim.setText(spannable, TextView.BufferType.SPANNABLE);*/
             String myText = getString(R.string.Shmot_32);
+            if(perek == 34){
+
+                myText = getString(R.string.Shmot_34);
+            }
 
             String [] translatedText = myText.split(":");
             int pasukCount = 1;
@@ -78,13 +94,16 @@ public class pesukimpage extends AppCompatActivity {
                 Document doc = Jsoup.parse(is,"UTF-8","https://www.example.com");
                 Elements perakim = doc.getElementsByTag("H2");
                 Element myPerek = perakim.get(31);
+                if(perek == 34){
+                    myPerek = perakim.get(33);
+                }
                 Element table = myPerek.nextElementSibling();
                 Elements pesukimHebrew = table.getElementsByClass("h");
                 for(Element pasuk : pesukimHebrew){
                    // builder.append(pasuk.text()).append("\n\n");
                     TextView newView = new TextView(this);
                     TextView newViewTow = new TextView(this);
-                    String tempString = translatedText[pasukCount]+"\n";
+                    String tempString = translatedText[pasukCount] + "\n";
 
                     pasukCount+=2;
                     String tempTwo = pasuk.text() + "\n";
@@ -177,6 +196,10 @@ public class pesukimpage extends AppCompatActivity {
             }
 
         }).start();
+    }
+
+    public void playSound(){
+
     }
 
 
